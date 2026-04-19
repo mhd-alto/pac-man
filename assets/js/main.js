@@ -198,28 +198,39 @@ ghosts.forEach(ghost => {
 // move ghosts randomly
 
 
-const moveGhost  = (ghost) => {
-  const directions = [-1, 1, width, -width]
-  const direction = directions[Math.floor(Math.random() * directions.length)]
+function moveGhost(ghost) {
+        const directions = [-1, 1, width, -width]
+        let direction = directions[Math.floor(Math.random() * directions.length)]
 
-  ghost.timerId = setInterval(()=>{
-    // is the next square safe no ghost on obs
-    if(
-      !squares[ghost.currentIndex + direction].classList.contains('ghost') &&
-      !squares[ghost.currentIndex + direction].classList.contains('wall') 
-    )
-    {
-    squares[ghost.currentIndex].classList.remove(ghost.className, 'ghost')
-    ghost.currentIndex += direction
-    squares[ghost.currentIndex].classList.add(ghost.className,'ghost')
-  }else
-  {
-    //find new direction
-    direction = directions[Math.floor(Math.random() + directions.length)]
-  }
+        ghost.timerId = setInterval(function () {
+            //if next square your ghost is going to go to does not have a ghost and does not have a wall
+            if (
+                !squares[ghost.currentIndex + direction].classList.contains("ghost") &&
+                !squares[ghost.currentIndex + direction].classList.contains("wall")
+            ) {
+                squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost")
+                ghost.currentIndex += direction
+                squares[ghost.currentIndex].classList.add(ghost.className, "ghost")
+                // else find a new random direction to go in
+            } else direction = directions[Math.floor(Math.random() * directions.length)]
+            // if the ghost is currently scared
+            if (ghost.isScared) {
+                squares[ghost.currentIndex].classList.add("scared-ghost")
+            }
 
-  }, ghost.speed)
-}
+            //if the ghost is currently scared and pacman is on it
+            if (ghost.isScared && squares[ghost.currentIndex].classList.contains("pac-man")) {
+                ghost.isScared = false
+                squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost")
+                ghost.currentIndex = ghost.startIndex
+                score += 100
+                scoreDisplay.innerHTML = score
+                squares[ghost.currentIndex].classList.add(ghost.className, "ghost")
+            }
+            checkForGameOver()
+        }, ghost.speed)
+    };
+
 ghosts.forEach(ghost=> moveGhost(ghost))
 
 });
