@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pac-Man Beginner Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.8;
+      padding: 25px;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    h1, h2, h3 {
+      color: #facc15;
+    }
+    code {
+      background: #1e293b;
+      padding: 3px 6px;
+      border-radius: 5px;
+      color: #22d3ee;
+    }
+    pre {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🟡 Pac-Man Game — Beginner Explanation</h1>
+
+<section>
+<h2>1. What is this project?</h2>
+<p>
+This is a simple Pac-Man game made using <b>HTML, CSS, and JavaScript</b>.
+You control Pac-Man using your keyboard and try to eat all the dots while avoiding ghosts.
+</p>
+</section>
+
+<section>
+<h2>2. How the game is built</h2>
+<p>The game has 3 main parts:</p>
+<ul>
+<li><b>HTML</b> → creates the structure (grid, score)</li>
+<li><b>CSS</b> → styles the game (colors, layout)</li>
+<li><b>JavaScript</b> → controls the logic (movement, scoring, AI)</li>
+</ul>
+</section>
+
+<section>
+<h2>3. The Grid (Game Board)</h2>
+
+<p>
+The game board is a grid made of small squares.
+Each square is a <code>div</code>.
+</p>
+
+<pre>
+const width = 28;
+</pre>
+
+<p>
+This means:
+<ul>
+<li>The grid has 28 columns</li>
+<li>Total squares = 28 × 28 = 784</li>
+</ul>
+</p>
+
+<p>
+All squares are stored inside an array:
+</p>
+
+<pre>
+const squares = [];
+</pre>
+
+<p>
+Think of this array like a list of all positions in the game.
+</p>
+</section>
+
+<section>
+<h2>4. The Layout System</h2>
+
+<p>
+The layout array defines what each square contains:
+</p>
+
+<pre>
+0 = pac-dot (food)
+1 = wall
+2 = ghost area
+3 = power pellet
+4 = empty space
+</pre>
+
+<p>
+Each number becomes a visual element using CSS classes.
+</p>
+</section>
+
+<section>
+<h2>5. Creating the Board</h2>
+
+<p>
+This function builds the grid:
+</p>
+
+<pre>
+for (let i = 0; i < layout.length; i++) {
+  const square = document.createElement("div");
+  grid.appendChild(square);
+  squares.push(square);
+}
+</pre>
+
+<p>
+Step-by-step:
+</p>
+<ul>
+<li>Create a new square</li>
+<li>Add it to the grid</li>
+<li>Store it in the array</li>
+<li>Add a class based on layout</li>
+</ul>
+</section>
+
+<section>
+<h2>6. Pac-Man Movement</h2>
+
+<p>
+Pac-Man moves using arrow keys.
+</p>
+
+<p>
+Example:
+</p>
+
+<pre>
+if (key === "ArrowLeft") {
+  pacmanCurrentIndex -= 1;
+}
+</pre>
+
+<p>
+But before moving, we check:
+</p>
+
+<ul>
+<li>Is there a wall?</li>
+<li>Is it inside the grid?</li>
+<li>Is it a ghost area?</li>
+</ul>
+
+<p>
+This prevents illegal movement.
+</p>
+</section>
+
+<section>
+<h2>7. Eating Food</h2>
+
+<h3>Pac-dots</h3>
+<pre>
+if (square.classList.contains("pac-dot")) {
+  score++;
+}
+</pre>
+
+<h3>Power pellets</h3>
+<p>
+Special food that makes ghosts scared.
+</p>
+
+<pre>
+ghost.isScared = true;
+</pre>
+
+<p>
+After 10 seconds, ghosts return to normal.
+</p>
+</section>
+
+<section>
+<h2>8. Ghost System</h2>
+
+<p>
+Ghosts are objects created using a class.
+</p>
+
+<pre>
+class Ghost {
+  constructor(name, start, speed) {
+    this.name = name;
+    this.startIndex = start;
+    this.speed = speed;
+  }
+}
+</pre>
+
+<p>
+Each ghost has:
+</p>
+
+<ul>
+<li>Position</li>
+<li>Speed</li>
+<li>Scared state</li>
+</ul>
+</section>
+
+<section>
+<h2>9. Ghost AI (BFS Algorithm)</h2>
+
+<p>
+Instead of moving randomly, ghosts use BFS (Breadth-First Search).
+</p>
+
+<h3>What is BFS?</h3>
+<p>
+BFS is a way to find the shortest path between two points.
+</p>
+
+<h3>How it works:</h3>
+<ol>
+<li>Start from ghost position</li>
+<li>Check all possible moves</li>
+<li>Explore step by step</li>
+<li>Stop when reaching Pac-Man</li>
+</ol>
+
+<pre>
+const bfs = (start, target) => {
+  const queue = [[start]];
+  const visited = new Set();
+
+  while (queue.length) {
+    const path = queue.shift();
+    const current = path[path.length - 1];
+
+    if (current === target) return path;
+  }
+};
+</pre>
+
+<p>
+The ghost then follows the first step of this path.
+</p>
+</section>
+
+<section>
+<h2>10. Game Rules</h2>
+
+<h3>Game Over</h3>
+<ul>
+<li>Pac-Man touches a normal ghost</li>
+</ul>
+
+<h3>Win</h3>
+<ul>
+<li>All dots are eaten</li>
+</ul>
+</section>
+
+<section>
+<h2>11. Scoring System</h2>
+
+<ul>
+<li>Dot = +1</li>
+<li>Power pellet = +10</li>
+<li>Ghost = +100</li>
+</ul>
+</section>
+
+<section>
+<h2>12. What You Learned</h2>
+
+<p>
+By building this game, you learned:
+</p>
+
+<ul>
+<li>How to use arrays to represent a grid</li>
+<li>How to move objects in a game</li>
+<li>How to detect collisions</li>
+<li>How to use algorithms (BFS)</li>
+<li>How game logic works</li>
+</ul>
+</section>
+
+<section>
+<h2>13. Next Improvements</h2>
+
+<ul>
+<li>Add sound effects</li>
+<li>Make ghosts smarter</li>
+<li>Add levels</li>
+<li>Add animations</li>
+</ul>
+</section>
+
+</body>
+</html>

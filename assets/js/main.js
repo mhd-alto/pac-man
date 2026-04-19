@@ -1,8 +1,52 @@
-document.addEventListener("DOMContentLoaded", () => {
+// Splash screen with fade out
+setTimeout(() => {
+  const elements = ['.loader', '#overlayer'];
+  
+  elements.forEach(selector => {
+    const el = document.querySelector(selector);
+    if (el) {
+      el.style.transition = 'opacity 0.5s';
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.style.display = 'none';
+        // Start game AFTER splash screen is fully hidden
+      }, 500);
+    }
+  });
+  initializeGame();
+}, 7000);
+
+// Simple counter animation
+document.querySelectorAll('.count h3').forEach(counter => {
+  const target = parseInt(counter.innerText);
+  let current = 0;
+  
+  const updateCounter = () => {
+    if (current < target) {
+      current++;
+      counter.innerText = current;
+      setTimeout(updateCounter, 5000 / target);
+    }
+  };
+  
+  updateCounter();
+});
+
+const initializeGame = () => {
+
+  console.log("Game started!");
+  const game = document.querySelector("#game");
   const scoreDisplay = document.querySelector("#score");
   const width = 28; // 560px / 20 = 28
+  const introMusic = new Audio("./assets/audio/pacman.mp3")
+  const waka = new Audio("./assets/audio/pac-man-waka-waka.mp3")
+  const died = new Audio("./assets/audio/8d82b5_pacman_dies_sound_effect.mp3")
+  
+  introMusic.play();
   let score = 0;
   const grid = document.querySelector(".grid");
+  game.style.display = "flex"
+
   const squares = [];
 
   // 0 is pac dots
@@ -70,6 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
         squares[i].classList.add("power-pellet");
       }
       squares[i].id = i;
+      if ([0, 27, 756, 783].includes(i)) {
+          squares[i].classList.add("angle");
+      }
+
     }
   };
   createBoard();
@@ -146,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     powerPelletEaten()
     checkForGameOver()
     checkForWin()
+    waka.play();
   };
 
   document.addEventListener("keyup", movePacman);
@@ -202,39 +251,102 @@ ghosts.forEach(ghost => {
 
 // move ghosts randomly
 
+const getNeighbors = (index) => {
+  const neighbors = [];
+  const directions = [-1, 1, width, -width];
+
+  for (let dir of directions) {
+    const next = index + dir;
+
+    if (
+      squares[next] &&
+      !squares[next].classList.contains("wall")
+    ) {
+      neighbors.push(next);
+    }
+  }
+
+  return neighbors;
+};
+
+const bfs = (start, target) => {
+  const queue = [[start]];
+  const visited = new Set();
+
+  while (queue.length > 0) {
+    const path = queue.shift();
+    const current = path[path.length - 1];
+
+    if (current === target) {
+      return path;
+    }
+
+    if (!visited.has(current)) {
+      visited.add(current);
+
+      const neighbors = getNeighbors(current);
+
+      for (let neighbor of neighbors) {
+        if (!visited.has(neighbor)) {
+          queue.push([...path, neighbor]);
+        }
+      }
+    }
+  }
+
+  return null; // no path found
+};
+
 
 const moveGhost = (ghost) => {
-        const directions = [-1, 1, width, -width]
-        let direction = directions[Math.floor(Math.random() * directions.length)]
+  ghost.timerId = setInterval(function () {
+    const path = bfs(ghost.currentIndex, pacmanCurrentIndex);
 
-        ghost.timerId = setInterval(function () {
-            //if next square your ghost is going to go to does not have a ghost and does not have a wall
-            if (
-                !squares[ghost.currentIndex + direction].classList.contains("ghost") &&
-                !squares[ghost.currentIndex + direction].classList.contains("wall")
-            ) {
-                squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost")
-                ghost.currentIndex += direction
-                squares[ghost.currentIndex].classList.add(ghost.className, "ghost")
-                // else find a new random direction to go in
-            } else direction = directions[Math.floor(Math.random() * directions.length)]
-            // if the ghost is currently scared
-            if (ghost.isScared) {
-                squares[ghost.currentIndex].classList.add("scared-ghost")
-            }
+    if (path && path.length > 1) {
+      const nextMove = path[1];
 
-            //if the ghost is currently scared and pacman is on it
-            if (ghost.isScared && squares[ghost.currentIndex].classList.contains("pac-man")) {
-                ghost.isScared = false
-                squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost")
-                ghost.currentIndex = ghost.startIndex
-                score += 100
-                scoreDisplay.innerHTML = score
-                squares[ghost.currentIndex].classList.add(ghost.className, "ghost")
-            }
-            checkForGameOver()
-        }, ghost.speed)
-    };
+      squares[ghost.currentIndex].classList.remove(
+        ghost.className,
+        "ghost",
+        "scared-ghost"
+      );
+
+      ghost.currentIndex = nextMove;
+
+      squares[ghost.currentIndex].classList.add(
+        ghost.className,
+        "ghost"
+      );
+    }
+
+    // scared logic stays the same
+    if (ghost.isScared) {
+      squares[ghost.currentIndex].classList.add("scared-ghost");
+    }
+
+    // eaten ghost
+    if (
+      ghost.isScared &&
+      squares[ghost.currentIndex].classList.contains("pac-man")
+    ) {
+      ghost.isScared = false;
+      squares[ghost.currentIndex].classList.remove(
+        ghost.className,
+        "ghost",
+        "scared-ghost"
+      );
+      ghost.currentIndex = ghost.startIndex;
+      score += 100;
+      scoreDisplay.innerHTML = score;
+      squares[ghost.currentIndex].classList.add(
+        ghost.className,
+        "ghost"
+      );
+    }
+
+    checkForGameOver();
+  }, ghost.speed);
+};
 
 const checkForGameOver = () => {
         if (
@@ -243,6 +355,7 @@ const checkForGameOver = () => {
             ghosts.forEach(ghost => clearInterval(ghost.timerId))
             document.removeEventListener("keyup", movePacman)
             setTimeout(() => {
+                died.play();
                 alert("Game Over")
             }, 500)
         }
@@ -259,4 +372,4 @@ const checkForWin = () => {
 
 ghosts.forEach(ghost=> moveGhost(ghost))
 
-});
+};
