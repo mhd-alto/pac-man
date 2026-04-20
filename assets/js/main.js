@@ -126,6 +126,7 @@ const initializeGame = () => {
   // draw pac-man onto the board
   let pacmanCurrentIndex = 490;
   squares[pacmanCurrentIndex].classList.add("pac-man");
+  let lastPacManIndex = -1;
 
   //move pac-man
   const movePacman = (e) => {
@@ -195,6 +196,7 @@ const initializeGame = () => {
     checkForGameOver()
     checkForWin()
     waka.play();
+    lastPacManIndex = pacmanCurrentIndex;
   };
 
   document.addEventListener("keyup", movePacman);
@@ -343,10 +345,12 @@ const moveGhost = (ghost) => {
         "ghost"
       );
     }
-
+    
     checkForGameOver();
   }, ghost.speed);
 };
+
+const reset = document.getElementById('play-again');
 
 const checkForGameOver = () => {
         if (
@@ -357,6 +361,8 @@ const checkForGameOver = () => {
             setTimeout(() => {
                 died.play();
                 alert("Game Over")
+                reset.style.display = "inline";
+                
             }, 500)
         }
     }
@@ -366,10 +372,63 @@ const checkForWin = () => {
             document.removeEventListener("keyup", movePacman)
             setTimeout(function () {
                 alert("You have WON!")
+                reset.style.display = "inline";
             }, 500)
         }
     }
 
 ghosts.forEach(ghost=> moveGhost(ghost))
 
+reset.addEventListener('click', () => {
+    // Clear all existing ghost intervals
+    ghosts.forEach(ghost => {
+        clearInterval(ghost.timerId);
+    });
+    
+    // Reset score
+    score = 0;
+    scoreDisplay.innerHTML = score;
+    
+    // Clear the entire grid
+    while (grid.firstChild) {
+        grid.removeChild(grid.firstChild);
+    }
+    
+    // Clear squares array
+    squares.length = 0;
+    
+    // Recreate the board
+    createBoard();
+    
+    // Reset pacman position
+    pacmanCurrentIndex = 490;
+    squares[pacmanCurrentIndex].classList.add("pac-man");
+    
+    // Reset ghosts
+    ghosts.forEach(ghost => {
+        // Remove ghost from current position
+        if (squares[ghost.currentIndex]) {
+            squares[ghost.currentIndex].classList.remove(ghost.className, "ghost", "scared-ghost");
+        }
+        
+        // Reset ghost properties
+        ghost.currentIndex = ghost.startIndex;
+        ghost.isScared = false;
+        
+        // Add ghost to new position
+        squares[ghost.currentIndex].classList.add(ghost.className, "ghost");
+    });
+    
+    // Restart ghost movement
+    ghosts.forEach(ghost => moveGhost(ghost));
+    
+    // Restart music
+    introMusic.currentTime = 0;
+    introMusic.play();
+    
+    // Ensure event listener is only added once
+    document.removeEventListener("keyup", movePacman);
+    document.addEventListener("keyup", movePacman);
+});
 };
+

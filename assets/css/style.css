@@ -24,20 +24,22 @@ body{
 
 
 
-h2{
+.opt-item{
   text-shadow:  0 0 20px aqua;
   color: antiquewhite;
     display: inline-block;
     background: #111;
     padding: 6px 20px;
     border-radius: 8px;
-    font-size: 1.6em;
+    font-size: 1.2em;
     font-weight: bold;
     color: #0ff;
     text-shadow: 0 0 3px #0ff;
     font-family: 'Courier New', monospace;
     border: 1px solid #0ff;
     box-shadow: 0 0 5px rgba(0,255,255,0.3);
+    margin: 0;
+    height: 40px;
 }
   
 #presents{
@@ -101,6 +103,7 @@ h2{
     justify-content: center;
     align-items: center;
     text-align: center;
+    gap: 20px;
 }
 
 
@@ -211,3 +214,21 @@ label
         height: 8px;
       }
     }
+
+#play-again{
+  display: none;
+  transition: box-shadow 3s ease-in-out;
+}
+
+#play-again:hover{
+  box-shadow: 0 0 30px aqua;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.opt{
+    display: inline-flex;
+    align-content: center;
+    justify-content: center;
+    gap: 10px;
+}
