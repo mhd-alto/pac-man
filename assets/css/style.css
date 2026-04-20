@@ -40,6 +40,11 @@ h2{
     box-shadow: 0 0 5px rgba(0,255,255,0.3);
 }
   
+#presents{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  margin-top: 35px;
+}
 .pac-dot {
     background-color: green;
     border: 5px solid white;
