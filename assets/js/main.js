@@ -1,7 +1,10 @@
 // Splash screen with fade out
+const byText = document.getElementById('by');
+setTimeout(() => byText.style.display = "inline-block", 2000)
+
+
 setTimeout(() => {
   const elements = ['.loader', '#overlayer'];
-  
   elements.forEach(selector => {
     const el = document.querySelector(selector);
     if (el) {
@@ -9,28 +12,13 @@ setTimeout(() => {
       el.style.opacity = '0';
       setTimeout(() => {
         el.style.display = 'none';
-        // Start game AFTER splash screen is fully hidden
       }, 500);
     }
   });
   initializeGame();
-}, 7000);
 
-// Simple counter animation
-document.querySelectorAll('.count h3').forEach(counter => {
-  const target = parseInt(counter.innerText);
-  let current = 0;
-  
-  const updateCounter = () => {
-    if (current < target) {
-      current++;
-      counter.innerText = current;
-      setTimeout(updateCounter, 5000 / target);
-    }
-  };
-  
-  updateCounter();
-});
+}, 5000);
+
 
 const initializeGame = () => {
 
