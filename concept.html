@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Concepts (Pac-Man Game)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #f4f4f4;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #ffcc00;
+    }
+    .section {
+      background: #1e1e1e;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    code {
+      display: block;
+      background: #000;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      color: #00ffcc;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+<h1>JavaScript Concepts in Pac-Man Game</h1>
+
+<div class="section">
+  <h2>1. Arrow Functions</h2>
+  <p>Shorter way to write functions.</p>
+  <code>const initializeGame = () => {
+  console.log("Game started!");
+}</code>
+</div>
+
+<div class="section">
+  <h2>2. Template Literals</h2>
+  <p>Use backticks and embed variables.</p>
+  <code>console.log(`Score: ${score}`);</code>
+</div>
+
+<div class="section">
+  <h2>3. forEach()</h2>
+  <p>Loop through arrays easily.</p>
+  <code>elements.forEach(el => {
+  console.log(el);
+});</code>
+</div>
+
+<div class="section">
+  <h2>4. setTimeout & setInterval</h2>
+  <p>Run code after delay or repeatedly.</p>
+  <code>setTimeout(() => {}, 1000);
+setInterval(() => {}, 500);</code>
+</div>
+
+<div class="section">
+  <h2>5. classList</h2>
+  <p>Modify CSS classes.</p>
+  <code>el.classList.add("active");
+el.classList.remove("hidden");</code>
+</div>
+
+<div class="section">
+  <h2>6. Classes</h2>
+  <p>Create object blueprints.</p>
+  <code>class Ghost {
+  constructor(name) {
+    this.name = name;
+  }
+}</code>
+</div>
+
+<div class="section">
+  <h2>7. Arrays</h2>
+  <p>Store multiple values.</p>
+  <code>const arr = [1,2,3];
+arr.push(4);</code>
+</div>
+
+<div class="section">
+  <h2>8. Objects</h2>
+  <p>Store key-value pairs.</p>
+  <code>const obj = {name: "Pacman"};</code>
+</div>
+
+<div class="section">
+  <h2>9. Switch</h2>
+  <p>Multiple conditions cleaner than if/else.</p>
+  <code>switch(key) {
+  case "ArrowLeft": break;
+}</code>
+</div>
+
+<div class="section">
+  <h2>10. Event Listeners</h2>
+  <p>Respond to user input.</p>
+  <code>document.addEventListener("click", () => {});</code>
+</div>
+
+<div class="section">
+  <h2>11. BFS Algorithm</h2>
+  <p>Find shortest path.</p>
+  <code>const bfs = () => {
+  // pathfinding
+}</code>
+</div>
+
+<div class="section">
+  <h2>12. Ternary Operator</h2>
+  <p>Shortcut for if/else.</p>
+  <code>const result = condition ? "yes" : "no";</code>
+</div>
+
+<div class="section">
+  <h2>13. Spread Operator</h2>
+  <p>Copy arrays.</p>
+  <code>const newArr = [...arr];</code>
+</div>
+
+<div class="section">
+  <h2>14. Set</h2>
+  <p>Store unique values.</p>
+  <code>const set = new Set();</code>
+</div>
+
+<div class="section">
+  <h2>15. Audio</h2>
+  <p>Play sound.</p>
+  <code>const sound = new Audio("sound.mp3");
+sound.play();</code>
+</div>
+
+<div class="section">
+  <h2>16. clearInterval</h2>
+  <p>Stop repeating function.</p>
+  <code>clearInterval(timer);</code>
+</div>
+
+<div class="section">
+  <h2>17. DOM Manipulation</h2>
+  <p>Modify HTML elements.</p>
+  <code>document.body.innerHTML = "Hello";</code>
+</div>
+
+<div class="section">
+  <h2>18. Modulo Operator</h2>
+  <p>Get remainder.</p>
+  <code>if (i % 2 === 0) {}</code>
+</div>
+
+<div class="section">
+  <h2>19. Style Manipulation</h2>
+  <p>Change CSS directly.</p>
+  <code>el.style.color = "red";</code>
+</div>
+
+</body>
+</html>
